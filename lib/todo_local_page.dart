@@ -13,6 +13,12 @@ class _TodoLocalPageState extends State<TodoLocalPage> {
   final TextEditingController _controller = TextEditingController();
   final List<String> _todos = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadTodos();
+  }
+
   void _addTodo(){
     final text = _controller.text.trim();
     if(text.isNotEmpty){
@@ -20,6 +26,7 @@ class _TodoLocalPageState extends State<TodoLocalPage> {
         _todos.add(text);
         _controller.clear();
       });
+      _saveTodos();
     }
   }
 
@@ -30,9 +37,9 @@ class _TodoLocalPageState extends State<TodoLocalPage> {
 
   Future<void> _loadTodos() async {
     final prefs = await SharedPreferences.getInstance();
-    final saveeList = prefs.getStringList("todos") ?? [];
+    final saveList = prefs.getStringList("todos") ?? [];
     setState(() {
-      _todos.addAll(saveeList);
+      _todos.addAll(saveList);
     });
   }
 
@@ -44,6 +51,7 @@ class _TodoLocalPageState extends State<TodoLocalPage> {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("'$deleted' 삭제됨"))
     );
+    _saveTodos();
   }
 
   @override
