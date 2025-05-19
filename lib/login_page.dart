@@ -47,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 12),
             TextField(
+              obscureText: true,
               controller: pwController,
               decoration: const InputDecoration(labelText: "비밀번호"),
             ),
