@@ -23,11 +23,14 @@ class _TodoRemotePageState extends State<TodoRemotePage> {
   }
 
   void _addTodo(String text) async{
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+
     if(text.trim().isEmpty) return;
 
     await supabase.from('todos').insert({
       'text': text.trim(),
       'done': false,
+      'user_id' : userId
     });
     _controller.clear();
     _loadTodos();
@@ -39,9 +42,12 @@ class _TodoRemotePageState extends State<TodoRemotePage> {
   }
 
   Future<void> _loadTodos() async {
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+
     final response = await supabase
       .from('todos')
       .select()
+      .eq("user_id", userId as Object)
       .order('id', ascending: false);
 
     setState(() {
@@ -75,7 +81,17 @@ class _TodoRemotePageState extends State<TodoRemotePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Remote To-Do"),
+        title: const Text("나의 To-Do 앱"),
+        backgroundColor: Colors.indigo,
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await supabase.auth.signOut();
+                Navigator.pushReplacementNamed(context, "/login");
+              },
+              icon: const Icon(Icons.logout)
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -87,16 +103,30 @@ class _TodoRemotePageState extends State<TodoRemotePage> {
                     child: TextField(
                       controller: _controller,
                       onSubmitted: (_) => _addTodo(_controller.text),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: "할 일을 입력하세요",
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                         border: OutlineInputBorder()
                       ),
                     )
                 ),
                 const SizedBox(width: 10),
-                ElevatedButton(
+                ElevatedButton.icon(
                     onPressed: () => _addTodo(_controller.text),
-                    child: const Text("추가")
+                    icon: const Icon(Icons.add),
+                    label: const Text("추가"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.indigo,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 14
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                      )
+                    ),
                 )
               ],
             ),
