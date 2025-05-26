@@ -1,4 +1,5 @@
 import 'package:chungju_lecture/login_page.dart';
+import 'package:chungju_lecture/main_tab_page.dart';
 import 'package:chungju_lecture/signup_page.dart';
 import 'package:chungju_lecture/splash_page.dart';
 import 'package:chungju_lecture/todo_local_page.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => const SplashPage(),
+        '/main': (context) => const MainTabPage(),
         '/todo-local': (context) => const TodoLocalPage(),
         '/todo-remote': (context) => const TodoRemotePage(),
         '/login': (context) => const LoginPage(),

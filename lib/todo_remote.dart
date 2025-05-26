@@ -138,22 +138,29 @@ class _TodoRemotePageState extends State<TodoRemotePage> {
                       itemCount: _todos.length,
                       itemBuilder: (context, index) {
                         final todo = _todos[index];
-                        return ListTile(
-                          leading: Checkbox(
+                        return Card(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 6,
+                          ),
+                          elevation: 2,
+                          child: ListTile(
+                            leading: Checkbox(
                               value: todo['done'],
                               onChanged: (value) => _toggleDone(index, value),
-                          ),
+                            ),
 
-                          title: Text(
+                            title: Text(
                               todo['text'],
                               style: TextStyle(
-                                decoration: todo['done']
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
-                                color : todo['done'] ? Colors.grey : Colors.black
+                                fontSize: 18,
+                                  decoration: todo['done']
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none,
+                                  color : todo['done'] ? Colors.grey : Colors.black
                               ),
+                            ),
+                            onLongPress: () => _deleteTodo(index),
                           ),
-                          onLongPress: () => _deleteTodo(index),
                         );
                       },
                   )
