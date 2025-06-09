@@ -25,6 +25,7 @@ class _ChatRoomListPageState extends State<ChatRoomListPage> {
         .from('rooms')
         .select()
         .order('created_at', ascending: false);
+    
     setState(() {
       _rooms = List<Map<String, dynamic>>.from(data);
     });
